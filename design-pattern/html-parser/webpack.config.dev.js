@@ -1,4 +1,5 @@
 const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const postcssFlexbugsFixes = require('postcss-flexbugs-fixes');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -6,7 +7,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 
 module.exports = {
-  devtool: false,
+  devtool: 'cheap-module-source-map',
+  devServer: {
+    publicPath: '/',
+    compress: true,
+    port: 3000
+  },
   entry: {
     app: './src/index.js'
   },
@@ -21,7 +27,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
-          compact: true
+          cacheDirectory: true
         }
       },
       {
@@ -32,7 +38,8 @@ module.exports = {
             {
               loader: 'css-loader',
               options: {
-                importLoaders: 1
+                importLoaders: 1,
+                sourceMap: true
               }
             },
             {
@@ -50,11 +57,15 @@ module.exports = {
                     ],
                     flexbox: 'no-2009'
                   })
-                ]
+                ],
+                sourceMap: true
               }
             },
             {
-              loader: 'sass-loader'
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true
+              }
             }
           ]
         })
@@ -74,22 +85,11 @@ module.exports = {
     ]
   },
   plugins: [
+    new CleanWebpackPlugin(['dist']),
     new ExtractTextPlugin('static/css/[name].[contenthash:8].css'),
     new HtmlWebpackPlugin({
       inject: true,
-      template: './src/index.html',
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true
-      }
+      template: './src/index.html'
     }),
     new ManifestPlugin({
       fileName: 'asset-manifest.json'

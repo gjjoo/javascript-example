@@ -10,18 +10,6 @@ const Table = (() => {
       this[Private] = { parent };
     }
 
-    // ES2015
-    // load(url) {
-    //   fetch(url)
-    //     .then(response => {
-    //       return response.json();
-    //     })
-    //     .then(json => {
-    //       console.log('json', json);
-    //       this[render]();
-    //     });
-    // }
-
     // ES2017 async + await
     async load(url) {
       const response = await fetch(url);

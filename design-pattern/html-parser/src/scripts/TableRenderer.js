@@ -2,14 +2,14 @@ import Renderer from './Renderer';
 
 class TableRenderer extends Renderer {
   constructor(parent) {
-    if (typeof parent !== 'string' || !parent) throw 'invalid param';
+    if (typeof parent !== 'string' || !parent) throw new Error('invalid param');
     super();
     this._parent = parent;
   }
 
   _render() {
     const parent = document.querySelector(this._parent);
-    if (!parent) throw 'invaild parent';
+    if (!parent) throw new Error('invaild parent');
     parent.innerHTML = '';
 
     const [table, caption] = 'table,caption'.split(',').map(v => document.createElement(v));
